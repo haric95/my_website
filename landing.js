@@ -14,11 +14,16 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
 
+function keyPressed() {
+    fill(0,0,150);
+    console.log("dick")
+}
+
 function draw() {
     background(170);
     x_border = 50;
     y_border = 50;
-    radius = 60;
+    radius = 80;
     diameter = radius*2;
     num_x = Math.floor((windowWidth - x_border) / (diameter));
     num_y = Math.floor((windowHeight - y_border) / (diameter));
@@ -32,10 +37,10 @@ function draw() {
             y_coord =  (y_offset) + radius + j*radius*2
             var distance = dist(mouseX, mouseY, x_coord, y_coord);
             var size_change = 20*(sin(-inp + distance/100));
-            ellipse(x_coord, y_coord, radius-10 + size_change, radius-10 + size_change);
+            ellipse(x_coord, y_coord, radius-distance/15 + size_change, radius-distance/15 + size_change);
             noFill();
             stroke(10);
-            ellipse(x_coord+5, y_coord-8, radius-10 + size_change, radius-10 + size_change);
+            ellipse(x_coord+5, y_coord-8, radius-distance/15 + size_change, radius-distance/15 + size_change);
 
         }
     }
