@@ -16,11 +16,10 @@ function windowResized() {
 
 function keyPressed() {
     fill(0,0,150);
-    console.log("dick")
 }
 
 function draw() {
-    background(170);
+    background(180);
     x_border = 50;
     y_border = 50;
     radius = 80;
@@ -44,17 +43,5 @@ function draw() {
 
         }
     }
-
-    //         const distance = dist(300,300, 75 + 50*i, 75  + 50 * j);
-    //         noStroke();
-    //         fill(200-j*30, 40, 100-i*15   + 100*abs(sin(inp/6)));
-    //         ellipse(std_radius + 50*i  + 10*sin(inp), std_radius  + 50 * j + 2*sin(inp*2.5), 25 - distance/30*sin(inp)*cos(distance) - 6*sin(inp*3 + i), 25 -  i*50/30*sin(inp)*cos(distance)*cos(inp*3 + j) );
-    //         noFill();
-    //         stroke(200-mouseX/100);
-    //         // ellipse(70 + 0.02*distance + 50*i, 70 - 0.02*distance  + 50 * j, 25 - distance/30*sin(inp)*cos(distance) - 6*sin(inp*3 + i), 25 -  i*50/30*sin(inp)*cos(distance)*cos(inp*3 + j) );
-    //     }
-    // }
-
-    
     inp += PI / 60;
 }
