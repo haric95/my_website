@@ -13,7 +13,6 @@ let susPercent = 0.2;
 let releaseTime = 0.5;
 let env, triOsc;
 
-
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
     // canvas.style("z-index", "-1")
@@ -23,10 +22,13 @@ function setup() {
     env = new p5.Envelope();
     env.setADSR(attackTime, decayTime, susPercent, releaseTime);
     env.setRange(attackLevel, releaseLevel);
-    triOsc = new p5.Oscillator('triangle');
+    triOsc = new p5.Oscillator('sine');
     triOsc.amp(env);
     triOsc.start();
     triOsc;
+    delay = new p5.Delay();
+    delay.process(triOsc, .25, .4, 500);
+
 
     
 }
@@ -38,7 +40,8 @@ function windowResized() {
 }
 
 function keyPressed() {
-    triOsc.freq(220 + rand_i*10 + rand_j*30);
+    freq = i*10 + j
+    triOsc.freq(110 + 55*(rand_i%2) + 55*(rand_j%2) + i*j*5);
     rand_i = Math.floor(Math.random() * (num_x + 1));
     rand_j = Math.floor(Math.random() * (num_y + 1));
     env.play();
@@ -46,7 +49,7 @@ function keyPressed() {
 }
 
 function draw() {
-    background(180);
+    background(155);
     x_border = 50;
     y_border = 50;
     radius = 80;
@@ -64,8 +67,9 @@ function draw() {
             y_coord =  (y_offset) + radius + j*radius*2
             var distance = dist(mouseX, mouseY, x_coord, y_coord);
             if (i == rand_i && j == rand_j) {
-                fill(100,100,100);
-                distance = 10;
+                fill(100,140,100);
+                distance = 100;
+                attackLevel = Math.floor(i/10);
             }
             var size_change = 20*(sin(-inp + distance/100));
             ellipse(x_coord, y_coord, radius-distance/15 + size_change, radius-distance/15 + size_change);
