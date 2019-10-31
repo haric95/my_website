@@ -21,7 +21,11 @@ let frequencies = [440.00, 493.88, 554.37, 587.33, 659.25, 739.99, 830.61, 880.0
 let key_mapping = {0: 0,18: 1,3: 2,5: 3,6: 4,7: 5,9: 6,10: 7}
 let frequency;
 let sorted = false;
-console.log(indices);
+
+let swapping = false;
+swap_counter = 0
+let swap_offset = 0;
+
 
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight);
@@ -48,27 +52,35 @@ function draw() {
     for (i = 0; i < 8; i++) {
         index = indices[i]
         noStroke();
-        fill(0+5*i);
-        let pos_x = x_border / 2 + max_radius + index*max_diameter;
-        let pos_y = windowHeight / 2 + 15*sin(inp + i/2);
+        fill(30, 40, 10+5*index);
+        let pos_x = x_border / 2 + max_radius + i*max_diameter;
+        let pos_y = windowHeight / 2 + 15*sin(inp + index/2);
         smooth();
         ellipse(pos_x, pos_y, max_radius - 30, max_radius - 30);
         noFill();
         stroke(30);
         strokeWeight(1)
-        if (selected == index) {
+        if (selected == i) {
             strokeWeight(5);
             stroke(10)
         }
-        offset = max_radius / 2
+        offset = max_radius / 2;
         ellipse(pos_x + 10, pos_y - 10, max_radius - 30, max_radius - 30);
     }
     inp += PI/120;
+
+    if (swapping) {
+        swap_offset = sin(PI/(100-swap_counter))
+        swap_counter += 1
+        if (swap_counter >= 100) {
+            swapping = false;
+            swap_counter = 0;
+        }
+    }
 }
 
 function fy_shuffle(arr) {
     let output = [];
-
     while (arr.length > 0) {
         index = Math.floor(Math.random()*arr.length);
         output.push(arr[index]);
@@ -78,18 +90,27 @@ function fy_shuffle(arr) {
 };
 
 function bubble_sort_pass(indices) {
-    for (i = 0; i < indices.length - 1; i++) {
+    let have_swapped = false;
+    k = 0
+    while (k < indices.length) {
         if (indices[i] > indices[i+1]) {
             const temp = indices[i];
             indices[i] = indices[i+1];
             indices[i+1] = temp;
+            have_swapped = true;
         }
+    }
+    if (! have_swapped) {
+        console.log("I'm in tune now!")
+        sorted = true;
     }
 }
 
-function swap_circles(index_1, index_2) {
-
+function swap() {
+    swapping = true;
 }
+
+
 
 function keyPressed() {
     let keyIndex = -1;
@@ -100,10 +121,10 @@ function keyPressed() {
     }
     if (keyIndex in key_mapping) {
         selected = key_mapping[keyIndex];
-        console.log(indices[selected]);
         frequency = frequencies[indices[selected]];
+
         if (! sorted) {
-            frequency += (Math.random()*15)
+            frequency += (Math.random()*30)
         }
         triOsc.freq(frequency);
         env.play();
