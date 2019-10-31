@@ -7,10 +7,10 @@ var num_y;
 
 let attackLevel = 1.0;
 let releaseLevel = 0;
-let attackTime = 0.001;
+let attackTime = 0.2;
 let decayTime = 0.2;
-let susPercent = 0.2;
-let releaseTime = 0.5;
+let susPercent = 0;
+let releaseTime = 0.9;
 let env, triOsc;
 
 let indices = [0,1,2,3,4,5,6,7];
@@ -25,6 +25,9 @@ let sorted = false;
 let swapping = false;
 swap_counter = 0
 let swap_offset = 0;
+
+let have_swapped  = false;
+let on = 0;
 
 
 function setup() {
@@ -52,7 +55,7 @@ function draw() {
     for (i = 0; i < 8; i++) {
         index = indices[i]
         noStroke();
-        fill(30, 40, 10+5*index);
+        fill(30, 20, 10+5*index);
         let pos_x = x_border / 2 + max_radius + i*max_diameter;
         let pos_y = windowHeight / 2 + 15*sin(inp + index/2);
         smooth();
@@ -68,6 +71,13 @@ function draw() {
         ellipse(pos_x + 10, pos_y - 10, max_radius - 30, max_radius - 30);
     }
     inp += PI/120;
+    if (! sorted) {
+        strokeWeight(2);
+        stroke(30,20,10);
+        rect_x = x_border/2 + max_diameter*on + 5;
+        rect_y = windowHeight / 2 - max_radius - 15;
+        rect(rect_x, rect_y, max_diameter * 2, max_diameter + 10, max_radius/2);
+    }
 
     if (swapping) {
         swap_offset = sin(PI/(100-swap_counter))
@@ -75,6 +85,7 @@ function draw() {
         if (swap_counter >= 100) {
             swapping = false;
             swap_counter = 0;
+            on ++;
         }
     }
 }
@@ -90,25 +101,28 @@ function fy_shuffle(arr) {
 };
 
 function bubble_sort_pass(indices) {
-    let have_swapped = false;
-    k = 0
-    while (k < indices.length) {
-        if (indices[i] > indices[i+1]) {
-            const temp = indices[i];
-            indices[i] = indices[i+1];
-            indices[i+1] = temp;
+    if (! sorted ) {
+        if (indices[on] > indices[on+1]) {
+            const temp = indices[on];
+            indices[on] = indices[on+1];
+            indices[on+1] = temp;
             have_swapped = true;
+            swapping = true;
         }
-    }
-    if (! have_swapped) {
-        console.log("I'm in tune now!")
-        sorted = true;
+        on++;
+        if (on >= indices.length - 1){
+            on = 0
+            if (! have_swapped) {
+                console.log("I'm in tune now!");
+                sorted = true;
+            } else {
+                have_swapped = false;
+            }
+        }
     }
 }
 
-function swap() {
-    swapping = true;
-}
+
 
 
 
@@ -146,3 +160,9 @@ function keyPressed() {
 //     } 
 
 // }
+
+function windowResized() {
+    background(150);
+    distance = 0;
+    resizeCanvas(windowWidth, windowHeight);
+}
