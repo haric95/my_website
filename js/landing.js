@@ -40,7 +40,7 @@ function windowResized() {
 }
 
 function keyPressed() {
-    freq = i*10 + j
+    // freq = i*10 + j
     triOsc.freq(110 + 55*(rand_i%2) + 55*(rand_j%2) + i*j*5);
     rand_i = Math.floor(Math.random() * (num_x + 1));
     rand_j = Math.floor(Math.random() * (num_y + 1));
